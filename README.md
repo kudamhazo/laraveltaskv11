@@ -8,6 +8,9 @@ Project runs using PHP 8.1. Before running the project, rename sample `.env.exam
 # from https://docs.docker.com/get-docker/
 docker compose up -d
 
+# Run package manager
+composer install
+
 # To setup database
 php artisan migrate
 
