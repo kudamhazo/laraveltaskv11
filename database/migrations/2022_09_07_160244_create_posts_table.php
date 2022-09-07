@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\Size;
 use App\Constants\TableName;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,11 +14,16 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create(TableName::USERS, function (Blueprint $table) {
+        Schema::create(TableName::POSTS, function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
+            $table->string('title', Size::POST_TITLE);
+            $table->string('description', Size::POST_DESCRIPTION);
+            $table
+                ->foreignId('website_id')
+                ->nullable(false)
+                ->constrained(TableName::WEBSITES)
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
             $table->timestamps();
         });
     }
@@ -29,6 +35,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists(TableName::USERS);
+        Schema::dropIfExists(TableName::POSTS);
     }
 };

@@ -13,7 +13,7 @@ php artisan serve
 **MUST:-**
 
 - [x] Use PHP 7.* or 8.*
-- [ ] Write migrations for the required tables.
+- [x] Write migrations for the required tables.
 - [ ] Endpoint to create a "post" for a "particular website".
 - [ ] Endpoint to make a user subscribe to a "particular website" with all the tiny validations included in it.
 - [ ] Use of command to send email to the subscribers (command must check all websites and send all new posts to
