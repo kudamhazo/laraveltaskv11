@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Constants\Size;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Website>
  */
-class UserFactory extends Factory
+class WebsiteFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,10 +18,8 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'first_name' => fake()->firstName(),
-            'last_name' => fake()->lastName(),
-            'email' => fake()->unique()->safeEmail(),
+            'url' => fake()->url(),
+            'title' => fake()->text(Size::WEBSITE_TITLE),
         ];
     }
-
 }
