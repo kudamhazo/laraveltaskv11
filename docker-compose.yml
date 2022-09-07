@@ -1,0 +1,33 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+    db:
+        image: mariadb:latest
+        restart: always
+        environment:
+            MARIADB_DATABASE: laraveltaskv11
+            MARIADB_ROOT_PASSWORD: example
+        ports:
+            - 3306:3306
+
+    adminer:
+        image: adminer:latest
+        restart: always
+        ports:
+            - 8080:8080
+
+    redis:
+        image: 'bitnami/redis:latest'
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+        ports:
+            - 6379:6379
+
+    mailhog:
+        image: 'mailhog/mailhog:latest'
+        ports:
+            - 1025:1025
+            - 8025:8025
+
