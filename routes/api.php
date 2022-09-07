@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('websites.posts', PostController::class)->only('store');
+Route::apiResource('websites.subscriptions', SubscriptionController::class)->only('store');
