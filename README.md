@@ -1,7 +1,7 @@
 # Laravel Task v11
 
 ```shell
-# To start the database, adminer, redis, mailhost
+# To start the database, adminer, redis, mailhog
 docker compose up -d
 
 # To run the project
