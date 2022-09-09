@@ -70,7 +70,7 @@ password: example
 - [x] Open API documentation (or) Postman collection demonstrating available APIs & their usage.
 - [ ] Use of contracts & services.
 - [ ] Use of caching wherever applicable.
-- [ ] Use of events/listeners.
+- [x] Use of events/listeners.
 
 # Database Model
 

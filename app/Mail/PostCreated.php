@@ -32,6 +32,10 @@ class PostCreated extends Mailable
         return $this
             ->from('test@localhost')
             ->view('emails.posts.created')
-            ->with(['postTitle' => $post->title, 'postDescription' => $post->description]);
+            ->with([
+                'notificationId' => $this->notification->id,
+                'postTitle' => $post->title,
+                'postDescription' => $post->description
+            ]);
     }
 }
