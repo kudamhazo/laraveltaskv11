@@ -17,8 +17,6 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request, Website $website)
     {
-        // get user
-        $user = User::where('email', $request->only(['email']))->first();
 
         $rules = [
             'email' => ['required', 'exists:users',
@@ -43,6 +41,8 @@ class SubscriptionController extends Controller
             $messages
         );
 
+        // get user
+        $user = User::where('email', $request->only(['email']))->first();
         $website->users()->save($user);
         return response(['subscribed' => true], 201);
     }
