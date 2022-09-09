@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
