@@ -7,6 +7,7 @@ use App\Mail\PostCreated;
 use App\Models\Notification;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -57,27 +58,30 @@ class SendEmails extends Command implements ShouldQueue
                 field(TableName::SUBSCRIPTIONS, 'website_id'),
                 field(TableName::WEBSITES, 'id')
             )
-            ->join(
-                TableName::USERS,
-                field(TableName::USERS, 'id'),
-                field(TableName::SUBSCRIPTIONS, 'user_id')
-            )
+            // Make sure only notifications that were never sent are processed
+            ->where(fn(Builder $query) => $query
+                ->selectRaw('COUNT(*)')
+                ->from(TableName::NOTIFICATIONS)
+                ->whereColumn(field(TableName::NOTIFICATIONS, 'subscription_id'), field(TableName::SUBSCRIPTIONS, 'id'))
+                ->whereColumn(field(TableName::NOTIFICATIONS, 'post_id'), field(TableName::POSTS, 'id'))
+                ->limit(1)
+                , 0)
+            // Start with the oldest post
             ->orderBy(field(TableName::POSTS, 'id'))
-            ->each(function ($row) {
-                try {
-                    // TODO Use advanced query to filter out users that have already received notification
-                    $notification = new Notification([
-                        'subscription_id' => $row->subscription_id,
-                        'post_id' => $row->post_id,
-                    ]);
-                    $notification->save();
-                    // Queue up mailing job
-                    Mail::to($notification->load(['subscription', 'subscription.user'])->subscription->user)
-                        ->queue(new PostCreated($notification));
-                } catch (\Exception $e) {
-                    // Do nothing. Duplicate notification error.
-                }
-
+            ->get()
+            // Generate notification records and map them into pipeline
+            ->map(function ($row) {
+                $notification = new Notification([
+                    'subscription_id' => $row->subscription_id,
+                    'post_id' => $row->post_id,
+                ]);
+                $notification->save();
+                return $notification;
+            })
+            // Queue up the notifications as mail
+            ->each(function (Notification $notification) {
+                Mail::to($notification->load(['subscription', 'subscription.user'])->subscription->user)
+                    ->queue(new PostCreated($notification));
             });
 
         $this->info('The email sending command was successful!');
